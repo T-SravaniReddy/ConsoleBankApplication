@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using BankApp.Models;
 using BankApp.Models.Exceptions;
 
 namespace BankApp.Services
@@ -18,9 +19,9 @@ namespace BankApp.Services
             Console.Write("Select Your Choice: ");
         }
 
-        public static string EnterPIN()
+        public static string EnterPassword()
         {
-            Console.Write("Enter Your PIN: ");
+            Console.Write("Enter Your Password: ");
             return Console.ReadLine();
 
         }
@@ -37,20 +38,34 @@ namespace BankApp.Services
             return Convert.ToInt32(Console.ReadLine());
         }
 
+        public static void PrintTransaction(Transaction transaction)
+        {
+            Console.Write(transaction.Datetime + "  " + transaction.Description + "  " + transaction.Amount + "  ");
+        }
+
+        public static void PrintLine()
+        {
+            Console.WriteLine();
+        }
+
+        public static void PrintFromStatement(string name)
+        {
+            Console.Write(" from " + name);
+        }
+
+        public static void PrintToStatement(string name)
+        {
+            Console.Write(" to " + name);
+        }
+
         public static double EnterAmount()
         {
             Console.Write("Enter Amount To Deposit: ");
             return Convert.ToDouble(Console.ReadLine());
         }
-
-        public static void InvalidPIN()
+        public static void PrintBalance(Account account)
         {
-           throw new InvalidPIN("Wrong/Invalid PIN");
-        }
-
-        public static void AccountDoesntExist()
-        {
-            throw new InvalidAccount("Account Doesn't Exist");
+            Console.WriteLine("Your Available Balance : " + account.Amount);
         }
 
         public static void Invalid()
@@ -70,11 +85,6 @@ namespace BankApp.Services
         {
             Console.Write("Enter Amount To Withdraw: ");
             return Convert.ToDouble(Console.ReadLine());
-        }
-
-        public static void InsufficientAmount()
-        {
-            throw new InsufficientAmount("Insufficient Amount");
         }
 
         public static void TransactionHeading()

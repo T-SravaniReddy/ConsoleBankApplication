@@ -4,9 +4,9 @@ using System.Text;
 
 namespace BankApp.Models.Exceptions
 {
-    public class InvalidPIN: Exception
+    public class InvalidPassword: Exception
     {
-        public InvalidPIN(String message) : base(message)
+        public InvalidPassword(String message) : base(message)
         {
         }
     }

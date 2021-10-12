@@ -1,61 +1,93 @@
 ﻿using System;
 using BankApp.Services;
+using BankApp.Models;
 
 namespace BankApplicationConsole
 {
     class Program
     {
-        public enum userOptions
-        {
-            CreateAccount = 1,
-            Deposit,
-            WithDraw,
-            Transfer,
-            TransactionHistory,
-            Exit
-        }
+        
         static void Main(string[] args)
         {
-            userOptions choice;
-            AccountServices accountServices = new AccountServices();
-            TransactionServices transactionServices = new TransactionServices();
+            Menu.UserOptions choice;
+            AccountService accountServices = new AccountService();
+            TransactionService transactionServices = new TransactionService();
             do
             {
                 StandardMessages.WelcomeMessage();
-                choice = (userOptions) Enum.Parse(typeof(userOptions), Console.ReadLine());
+                choice = (Menu.UserOptions) Enum.Parse(typeof(Menu.UserOptions), Console.ReadLine());
 
                 switch (choice)
                 {
-                    case userOptions.CreateAccount:
-                        AccountServices.AddAccount();
+                    case Menu.UserOptions.CreateAccount:
+                        int accountID = AccountService.AddAccount();
                         break;
 
-                    case userOptions.Deposit:
-                        AccountServices.Deposit();
+                    case Menu.UserOptions.Deposit:
+                        try
+                        {
+                            AccountService.Deposit();
+                        } catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                         break;
 
-                    case userOptions.WithDraw:
-                        AccountServices.Withdraw();
+                    case Menu.UserOptions.WithDraw:
+                        try
+                        {
+                            AccountService.Withdraw();
+                        } catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                         break;
 
-                    case userOptions.Transfer:
-                        AccountServices.TransferAmount();
+                    case Menu.UserOptions.Transfer:
+                        try
+                        {
+                            AccountService.TransferAmount();
+                        } catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                         break;
 
-                    case userOptions.TransactionHistory:
-                        TransactionServices.TransactionHistory();
+                    case Menu.UserOptions.TransactionHistory:
+                        try
+                        {
+                            TransactionService.TransactionHistory();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                         break;
 
-                    case userOptions.Exit:
-                        StandardMessages.Exit();
+                    case Menu.UserOptions.Exit:
+                        try
+                        {
+                            StandardMessages.Exit();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                         break;
 
                     default:
-                        StandardMessages.Invalid();
+                        try
+                        {
+                            StandardMessages.Invalid();
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex);
+                        }
                         break;
                 }
                 Console.WriteLine("\n");
-            } while (choice != userOptions.Exit);
+            } while (choice != Menu.UserOptions.Exit);
 
         }
     }

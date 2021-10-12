@@ -6,19 +6,17 @@ namespace BankApp.Models
 {
     public class Transaction
     {
-        public int accountID { get; set; }
-        public int toID { get; set; }
-        public string description { get; set; }
-        public double amount { get; set; }
-        public string datetime { get; set; }
+        public int ToID { get; set; }
+        public string Description { get; set; }
+        public double Amount { get; set; }
+        public DateTime Datetime { get; set; }
 
-        public Transaction(int accountID, int toID, string description, double amount, string datetime)
+        public Transaction( int toID, string description, double amount, DateTime datetime)
         {
-            this.accountID = accountID;
-            this.toID = toID;
-            this.description = description;
-            this.amount = amount;
-            this.datetime = datetime;
+            this.ToID = toID;
+            this.Description = description;
+            this.Amount = amount;
+            this.Datetime = datetime;
         }
     }
 }

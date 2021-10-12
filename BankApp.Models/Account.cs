@@ -1,22 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace BankApp.Models
 {
     public class Account
-    {
-        private static int index = 0; 
-        public int accountID { get; set; }
-        public string name { get; set; }
-        public double amount { get; set; }
-        public string pin { get; set; }
+    { 
+        public int AccountID { get; set; }
+        public string Name { get; set; }
+        public double Amount { get; set; }
+        public string Password { get; set; }
 
+        public List<Transaction> transactionList { set; get; }
 
-        public Account(string name, string pin)
+        public Account(int AccountID, string Name, string password)
         {
-            this.accountID = ++index;
-            this.pin = pin;
-            this.name = name;
-            this.amount = 0;
+            this.AccountID = AccountID;
+            this.Password = password;
+            this.Name = Name;
+            this.Amount = 0;
+            this.transactionList = new List<Transaction>();
         }
 
     }
