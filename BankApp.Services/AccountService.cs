@@ -17,14 +17,12 @@ namespace BankApp.Services
         {
             AccountsList = new List<Account>();
         }
-        public static int AddAccount()
+        public static Account AddAccount(string name, string pin)
         {
-            string name = StandardMessages.EnterUserName();
-            string pin = StandardMessages.EnterPassword();
+            
             Account account = new Account(++Index, name, pin);
             AccountsList.Add(account);
-            StandardMessages.CreateMessage(account.AccountID, account.Name, account.Amount);
-            return account.AccountID;
+            return account;
         }
         public static bool Validate(int accountID, string pin)
         {
@@ -44,19 +42,14 @@ namespace BankApp.Services
             return false;
         }
         
-        public static void Deposit()
+        public static double Deposit(int accountID, string pin, double amount)
         {
-            int accountID = StandardMessages.EnterAccountID();
             Account account = AccountsList.Single(m => m.AccountID == accountID);
             if (account != null)
             {
-                string pin = StandardMessages.EnterPassword();
                 if (Validate(accountID, pin))
                 {
-                    double amount = StandardMessages.EnterAmount();
                     account.Amount = (account.Amount + amount);
-                    StandardMessages.DepositMessage();
-                    StandardMessages.PrintBalance(account);
                     TransactionService.AddTransaction(account, -1, "deposit", amount, DateTime.Now);
                 }
                 else
@@ -68,31 +61,25 @@ namespace BankApp.Services
             {
                 throw new InvalidAccount("Account Doesn't Exist");
             }
-
+            return account.Amount;
         }
 
-        public static void Withdraw()
+        public static double Withdraw(int accountID, string pin, double amount)
         {
-            int accountID = StandardMessages.EnterAccountID(); 
             Account account = AccountsList.Single(m => m.AccountID == accountID);
             if (account != null)
             {
-                string pin = StandardMessages.EnterPassword();
                 if (Validate(accountID, pin))
                 {
-                    double amount = StandardMessages.EnterWithDrawAmount();
                     if (CheckBalance(account, amount))
                     {
                         account.Amount = (account.Amount - amount);
-                        StandardMessages.WithDrawMessage();
-                        StandardMessages.PrintBalance(account);
                         TransactionService.AddTransaction(account, -1, "withdraw", amount, DateTime.Now);
                     }
                     else
                     {
                         throw new InsufficientAmount("Insufficient Amount");
                     }
-
                 }
                 else
                 {
@@ -103,30 +90,24 @@ namespace BankApp.Services
             {
                 throw new InvalidAccount("Account Doesn't Exist");
             }
-
+            return account.Amount;
         }
 
-        public static void TransferAmount()
+        public static double TransferAmount(int accountID, string pin, double amount, int destinationID)
         {
-            int accountID = StandardMessages.EnterAccountID(); 
             Account account = AccountsList.Single(m => m.AccountID == accountID);
             if (account != null)
             {
-                string pin = StandardMessages.EnterPassword();
                 if (Validate(accountID, pin))
                 {
-                    int toID = StandardMessages.EnterAccountID();
-                    Account DestAccount = AccountsList.Single(m => m.AccountID == toID);
+                    Account DestAccount = AccountsList.Single(m => m.AccountID == destinationID);
                     if (DestAccount != null)
                     {
-                        double amount = StandardMessages.EnterTransferAmount();
                         if (CheckBalance(account, amount))
                         {
                             account.Amount = (account.Amount - amount);
                             DestAccount.Amount = (DestAccount.Amount + amount);
-                            StandardMessages.TransferMessage();
-                            StandardMessages.PrintBalance(account);
-                            TransactionService.AddTransaction(account, toID, "transfer", amount, DateTime.Now);
+                            TransactionService.AddTransaction(account, destinationID, "transfer", amount, DateTime.Now);
                             TransactionService.AddTransaction(DestAccount, accountID, "deposit", amount, DateTime.Now);
                         }
                         else
@@ -148,6 +129,7 @@ namespace BankApp.Services
             {
                 throw new InvalidAccount("Account Doesn't Exist");
             }
+            return account.Amount;
         }
         public static string GetName(int accountID)
         {

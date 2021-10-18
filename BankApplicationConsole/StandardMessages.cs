@@ -4,7 +4,7 @@ using System.Text;
 using BankApp.Models;
 using BankApp.Models.Exceptions;
 
-namespace BankApp.Services
+namespace BankApplicationConsole
 {
     public class StandardMessages
     {
@@ -63,9 +63,9 @@ namespace BankApp.Services
             Console.Write("Enter Amount To Deposit: ");
             return Convert.ToDouble(Console.ReadLine());
         }
-        public static void PrintBalance(Account account)
+        public static void PrintBalance(double balance)
         {
-            Console.WriteLine("Your Available Balance : " + account.Amount);
+            Console.WriteLine("Your Available Balance : " + balance);
         }
 
         public static void Invalid()

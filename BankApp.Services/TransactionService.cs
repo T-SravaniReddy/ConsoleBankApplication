@@ -14,37 +14,15 @@ namespace BankApp.Services
             Transaction transaction = new Transaction(toID, description, amount, datetime);
             account.transactionList.Add(transaction);
         }
-        private static void PrintTransactions(int accountID)
+        
+        public static List<Transaction> TransactionHistory(int accountID, string pin)
         {
-            Account account = AccountService.GetAccount(accountID);
-            foreach (Transaction transaction in account.transactionList)
-            {
-                StandardMessages.PrintTransaction(transaction);
-                if (transaction.ToID != -1)
-                {
-                    if (transaction.Description == "deposit")
-                    {
-                        StandardMessages.PrintFromStatement(AccountService.GetName(transaction.ToID));
-                    }
-                    else
-                    {
-                        StandardMessages.PrintToStatement(AccountService.GetName(transaction.ToID));
-                    }
-                }
-                StandardMessages.PrintLine();
-            }
-        }
-
-        public static void TransactionHistory()
-        {
-            int accountID = StandardMessages.EnterAccountID();
             if (AccountService.Contains(accountID) != null)
             {
-                string pin = StandardMessages.EnterPassword();
                 if (AccountService.Validate(accountID, pin))
                 {
-                    StandardMessages.TransactionHeading();
-                    PrintTransactions(accountID);
+                    Account account = AccountService.GetAccount(accountID);
+                    return account.transactionList;
                 }
                 else
                 {
