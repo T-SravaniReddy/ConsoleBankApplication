@@ -32,15 +32,15 @@ namespace BankApplicationConsole
             return Console.ReadLine();
         }
 
-        public static int EnterAccountID()
+        public static string EnterAccountID()
         {
             Console.Write("Enter Your Account ID: ");
-            return Convert.ToInt32(Console.ReadLine());
+            return Console.ReadLine();
         }
 
         public static void PrintTransaction(Transaction transaction)
         {
-            Console.Write(transaction.Datetime + "  " + transaction.Description + "  " + transaction.Amount + "  ");
+            Console.Write(transaction.Datetime + "  " + transaction.Type + "  " + transaction.Amount + "  ");
         }
 
         public static void PrintLine()
@@ -76,7 +76,7 @@ namespace BankApplicationConsole
         {
             Console.WriteLine("Successfully Exited");
         }
-        public static void CreateMessage(int accountID, string name, double amount)
+        public static void CreateMessage(string accountID, string name, double amount)
         {
             Console.WriteLine("Account Created Successfully with Account No: " + accountID + " Name: " + name + " Balance: " + amount);
         }

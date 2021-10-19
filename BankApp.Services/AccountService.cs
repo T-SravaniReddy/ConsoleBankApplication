@@ -10,23 +10,22 @@ namespace BankApp.Services
     public class AccountService
     {
 
-        private static List<Account> AccountsList { set; get; }
-        private static int Index = 0;
-        
-        static AccountService()
+        static DateTime PresentDate = DateTime.Today;
+
+        public static string AccountIdPattern(string Name)
         {
-            AccountsList = new List<Account>();
+            return Name.Substring(0, 3) + PresentDate.ToString("dd") + PresentDate.ToString("MM") + PresentDate.ToString("yyyy");
         }
-        public static Account AddAccount(string name, string pin)
+        public static Account AddAccount(Bank bank, string name, string pin)
         {
             
-            Account account = new Account(++Index, name, pin);
-            AccountsList.Add(account);
+            Account account = new Account(AccountIdPattern(name), name, pin);
+            bank.AccountsList.Add(account);
             return account;
         }
-        public static bool Validate(int accountID, string pin)
+        public static bool Validate(Bank bank,string accountID, string pin)
         {
-            Account account = AccountsList.Single(m => m.AccountID == accountID);
+            Account account = bank.AccountsList.Single(m => m.AccountID == accountID);
             if (pin != account.Password)
             {
                 return false;
@@ -42,15 +41,15 @@ namespace BankApp.Services
             return false;
         }
         
-        public static double Deposit(int accountID, string pin, double amount)
+        public static double Deposit(Bank bank, string accountID, string pin, double amount)
         {
-            Account account = AccountsList.Single(m => m.AccountID == accountID);
+            Account account = bank.AccountsList.Single(m => m.AccountID == accountID);
             if (account != null)
             {
-                if (Validate(accountID, pin))
+                if (Validate(bank,accountID, pin))
                 {
                     account.Amount = (account.Amount + amount);
-                    TransactionService.AddTransaction(account, -1, "deposit", amount, DateTime.Now);
+                    TransactionService.AddTransaction(account, "-1", TransactionType.Credit, amount, DateTime.Now);
                 }
                 else
                 {
@@ -64,17 +63,17 @@ namespace BankApp.Services
             return account.Amount;
         }
 
-        public static double Withdraw(int accountID, string pin, double amount)
+        public static double Withdraw(Bank bank, string accountID, string pin, double amount)
         {
-            Account account = AccountsList.Single(m => m.AccountID == accountID);
+            Account account = bank.AccountsList.Single(m => m.AccountID == accountID);
             if (account != null)
             {
-                if (Validate(accountID, pin))
+                if (Validate(bank,accountID, pin))
                 {
                     if (CheckBalance(account, amount))
                     {
                         account.Amount = (account.Amount - amount);
-                        TransactionService.AddTransaction(account, -1, "withdraw", amount, DateTime.Now);
+                        TransactionService.AddTransaction(account, "-1", TransactionType.Debit, amount, DateTime.Now);
                     }
                     else
                     {
@@ -93,22 +92,22 @@ namespace BankApp.Services
             return account.Amount;
         }
 
-        public static double TransferAmount(int accountID, string pin, double amount, int destinationID)
+        public static double TransferAmount(Bank bank, string accountID, string pin, double amount, string destinationID)
         {
-            Account account = AccountsList.Single(m => m.AccountID == accountID);
+            Account account = bank.AccountsList.Single(m => m.AccountID == accountID);
             if (account != null)
             {
-                if (Validate(accountID, pin))
+                if (Validate(bank,accountID, pin))
                 {
-                    Account DestAccount = AccountsList.Single(m => m.AccountID == destinationID);
+                    Account DestAccount = bank.AccountsList.Single(m => m.AccountID == destinationID);
                     if (DestAccount != null)
                     {
                         if (CheckBalance(account, amount))
                         {
                             account.Amount = (account.Amount - amount);
                             DestAccount.Amount = (DestAccount.Amount + amount);
-                            TransactionService.AddTransaction(account, destinationID, "transfer", amount, DateTime.Now);
-                            TransactionService.AddTransaction(DestAccount, accountID, "deposit", amount, DateTime.Now);
+                            TransactionService.AddTransaction(account, destinationID, TransactionType.Debit, amount, DateTime.Now);
+                            TransactionService.AddTransaction(DestAccount, accountID, TransactionType.Credit, amount, DateTime.Now);
                         }
                         else
                         {
@@ -131,17 +130,17 @@ namespace BankApp.Services
             }
             return account.Amount;
         }
-        public static string GetName(int accountID)
+        public static string GetName(Bank bank,string accountID)
         {
-            return AccountsList.Single(m => m.AccountID == accountID).Name;
+            return bank.AccountsList.Single(m => m.AccountID == accountID).Name;
         }
-        public static Account Contains(int accountID)
+        public static Account Contains(Bank bank,string accountID)
         {
-            return AccountsList.Single(m => m.AccountID == accountID);
+            return bank.AccountsList.Single(m => m.AccountID == accountID);
         }
-        public static Account GetAccount(int accountID)
+        public static Account GetAccount(Bank bank,string accountID)
         {
-            return AccountsList.Single(m => m.AccountID == accountID);
+            return bank.AccountsList.Single(m => m.AccountID == accountID);
         }
     }
 }

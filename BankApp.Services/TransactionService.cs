@@ -8,20 +8,24 @@ namespace BankApp.Services
 {
      public class TransactionService
     {
-
-        public static void AddTransaction(Account account, int toID, string description, double amount, DateTime datetime)
+        static DateTime PresentDate = DateTime.Today;
+        public static string TransactionIdGenerator(string bankID, string accountID)
         {
-            Transaction transaction = new Transaction(toID, description, amount, datetime);
+            return "TXN" + bankID + accountID + PresentDate.ToString("dd") + PresentDate.ToString("MM") + PresentDate.ToString("yyyy");
+        }
+        public static void AddTransaction(Account account, string toID, TransactionType type, double amount, DateTime datetime)
+        {
+            Transaction transaction = new Transaction(TransactionIdGenerator("0", account.AccountID),toID, type, amount, datetime);
             account.transactionList.Add(transaction);
         }
         
-        public static List<Transaction> TransactionHistory(int accountID, string pin)
+        public static List<Transaction> TransactionHistory(Bank bank,string accountID, string pin)
         {
-            if (AccountService.Contains(accountID) != null)
+            if (AccountService.Contains(bank,accountID) != null)
             {
-                if (AccountService.Validate(accountID, pin))
+                if (AccountService.Validate(bank,accountID, pin))
                 {
-                    Account account = AccountService.GetAccount(accountID);
+                    Account account = AccountService.GetAccount(bank,accountID);
                     return account.transactionList;
                 }
                 else

@@ -11,11 +11,13 @@ namespace BankApplicationConsole
         static void Main(string[] args)
         {
             Menu.UserOptions choice;
+            BankService bankService = new BankService();
             AccountService accountServices = new AccountService();
             TransactionService transactionServices = new TransactionService();
             string pin;
-            int accountID;
+            string accountID;
             double amount;
+            Bank bank = BankService.AddBank("XYZ");
             do
             {
                 StandardMessages.WelcomeMessage();
@@ -26,7 +28,7 @@ namespace BankApplicationConsole
                     case Menu.UserOptions.CreateAccount:
                         string name = StandardMessages.EnterUserName();
                         pin = StandardMessages.EnterPassword();
-                        Account account = AccountService.AddAccount(name, pin);
+                        Account account = AccountService.AddAccount(bank, name, pin);
                         StandardMessages.CreateMessage(account.AccountID, account.Name, account.Amount);
                         break;
 
@@ -36,7 +38,7 @@ namespace BankApplicationConsole
                         amount = StandardMessages.EnterAmount();
                         try
                         { 
-                            double balance = AccountService.Deposit(accountID, pin, amount);
+                            double balance = AccountService.Deposit(bank, accountID, pin, amount);
                             StandardMessages.DepositMessage();
                             StandardMessages.PrintBalance(balance);
                         } catch (Exception ex)
@@ -51,7 +53,7 @@ namespace BankApplicationConsole
                         amount = StandardMessages.EnterWithDrawAmount();
                         try
                         {
-                            double balance = AccountService.Withdraw(accountID, pin, amount);
+                            double balance = AccountService.Withdraw(bank, accountID, pin, amount);
                             StandardMessages.WithDrawMessage();
                             StandardMessages.PrintBalance(balance);
                         } catch (Exception ex)
@@ -63,11 +65,11 @@ namespace BankApplicationConsole
                     case Menu.UserOptions.Transfer:
                         accountID = StandardMessages.EnterAccountID();
                         pin = StandardMessages.EnterPassword();
-                        int destinationID = StandardMessages.EnterAccountID();
+                        string destinationID = StandardMessages.EnterAccountID();
                         amount = StandardMessages.EnterTransferAmount();
                         try
                         {
-                            double balance = AccountService.TransferAmount(accountID, pin, amount, destinationID);
+                            double balance = AccountService.TransferAmount(bank,accountID, pin, amount, destinationID);
                             StandardMessages.TransferMessage();
                             StandardMessages.PrintBalance(balance);
                         } catch (Exception ex)
@@ -82,19 +84,19 @@ namespace BankApplicationConsole
                         try
                         {
                             StandardMessages.TransactionHeading();
-                            List<Transaction> transactionList = TransactionService.TransactionHistory(accountID, pin);
+                            List<Transaction> transactionList = TransactionService.TransactionHistory(bank, accountID, pin);
                             foreach (Transaction transaction in transactionList)
                             {
                                 StandardMessages.PrintTransaction(transaction);
-                                if (transaction.ToID != -1)
+                                if (transaction.ToID != "-1")
                                 {
-                                    if (transaction.Description == "deposit")
+                                    if (transaction.Type == TransactionType.Credit)
                                     {
-                                        StandardMessages.PrintFromStatement(AccountService.GetName(transaction.ToID));
+                                        StandardMessages.PrintFromStatement(AccountService.GetName(bank,transaction.ToID));
                                     }
                                     else
                                     {
-                                        StandardMessages.PrintToStatement(AccountService.GetName(transaction.ToID));
+                                        StandardMessages.PrintToStatement(AccountService.GetName(bank,transaction.ToID));
                                     }
                                 }
                                 StandardMessages.PrintLine();
