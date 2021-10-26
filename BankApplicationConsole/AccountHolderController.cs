@@ -19,7 +19,7 @@ namespace BankApplicationConsole
             accountID = StandardMessages.EnterAccountID();
             pin = StandardMessages.EnterPassword();
             Bank bank = BankService.GetBank(bankID);
-            if (AccountService.Validate(bank, accountID, pin))
+            if (AccountService.Validate(bank, accountID, pin) == true)
             {
                 Console.WriteLine();
                 do

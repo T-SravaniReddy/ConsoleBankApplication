@@ -26,7 +26,7 @@ namespace BankApp.Services
         }
         public static bool Validate(Bank bank,string accountID, string pin)
         {
-            if (bank.AccountsList == null || bank == null) { return false; }
+            if (bank == null) { return false; }
             Account account = bank.AccountsList.SingleOrDefault(m => m.AccountID == accountID);
             if (account == null) return false;
             if (pin != account.Password)
