@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BankApp.Models
+namespace BankApp.Models.Enums
 {
     public enum TransactionType
     {
-        Credit,
+        Credit = 1,
         Debit
     }
 }

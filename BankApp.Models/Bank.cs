@@ -8,13 +8,26 @@ namespace BankApp.Models
     {
         public string BankID { get; set; }
         public string Name { get; set; }
-
+        public int SameRTGS { get; set; }
+        public int SameIMPS { get; set; }
+        public int DifferentRTGS { get; set; }
+        public int DifferentIMPS { get; set; }
+        public List<BankStaff> StaffList { get; set; }
+        public List<Currency> AcceptedCurrency { get; set; }
         public List<Account> AccountsList { set; get; }
-        public Bank(string BankId, string Name)
+
+        public Bank(string bankID, string name)
         {
-            this.BankID = BankID;
-            this.Name = Name;
-            this.AccountsList = new List<Account>();
+            BankID = bankID;
+            Name = name;
+            SameRTGS = 0;
+            SameIMPS = 5;
+            DifferentRTGS = 2;
+            DifferentIMPS = 6;
+            StaffList = new List<BankStaff>();
+            AcceptedCurrency = new List<Currency>();
+            AccountsList = new List<Account>();
+            AcceptedCurrency.Add(new Currency("INR", 0));
         }
     }
 }
