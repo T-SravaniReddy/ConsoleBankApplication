@@ -43,7 +43,8 @@ namespace BankApplicationConsole
                             Console.Write(bank.AcceptedCurrency[i].CurrencyCode + ":");
                             currencyCode = Console.ReadLine();
                             currency = BankService.GetCurrency(bankID, currencyCode);
-                            AccountService.AddAccount(bankID, name, accountPassword, gender, currency);
+                            Account account = AccountService.AddAccount(bankID, name, accountPassword, gender, currency);
+                            Console.WriteLine("Created Account with ID : " + account.AccountID);
                             break;
 
                         case Menu.StaffOptions.UpdateAccount:
