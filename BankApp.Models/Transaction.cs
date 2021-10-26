@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BankApp.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -10,7 +11,7 @@ namespace BankApp.Models
         public string ToID { get; set; }
         public TransactionType Type { get; set; }
         public double Amount { get; set; }
-        public DateTime Datetime { get; set; }
+        public DateTime DateTime { get; set; }
 
         public Transaction(string TransactionID, string toID, TransactionType type, double amount, DateTime datetime)
         {
