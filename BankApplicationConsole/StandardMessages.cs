@@ -4,6 +4,7 @@ using System.Text;
 using BankApp.Models;
 using BankApp.Models.Enums;
 using BankApp.Models.Exceptions;
+using BankApp.Services;
 
 namespace BankApplicationConsole
 {
@@ -37,6 +38,19 @@ namespace BankApplicationConsole
             Console.WriteLine("8. Revert Transaction");
             Console.WriteLine("9. Exit");
             Console.Write("Select Your Choice: ");
+        }
+
+        internal static string EnterCurrency(Bank bank)
+        {
+            Console.Write("Enter Currency Among ");
+            int i;
+            for (i = 0; i < bank.AcceptedCurrency.Count - 1; i++)
+            {
+                Console.Write(bank.AcceptedCurrency[i].CurrencyCode + ", ");
+            }
+            Console.Write(bank.AcceptedCurrency[i].CurrencyCode + ":");
+            string currencyCode = Console.ReadLine();
+            return currencyCode;
         }
 
         internal static Gender EnterGender()
@@ -135,7 +149,7 @@ namespace BankApplicationConsole
 
         internal static void PrintTransaction(Transaction transaction)
         {
-            Console.Write(transaction.TransactionID + " : " + transaction.DateTime + "  " + transaction.Type + "  " + transaction.Amount + "  ");
+            Console.Write(transaction.TransactionID + " : " + transaction.DateTime + "  " + transaction.Type + "  " + transaction.Currency.CurrencyCode + " " + transaction.Amount + "  ");
         }
 
         internal static void PrintLine()

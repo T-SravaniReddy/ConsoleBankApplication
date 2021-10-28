@@ -51,11 +51,12 @@ namespace BankApp.Services
             return false;
         }
 
-        public static double Deposit(Bank bank, string accountID, string pin, double amount)
+        public static double Deposit(Bank bank, string accountID, string pin, double amount, Currency currency)
         {
             Account account = bank.AccountsList.SingleOrDefault(m => m.AccountID == accountID);
             if (account != null)
             {
+                amount = ((amount * currency.EquivalentINR) / account.Currency.EquivalentINR);
                 if (Validate(bank,accountID, pin))
                 {
                     account.Balance = (account.Balance + amount);
@@ -79,16 +80,17 @@ namespace BankApp.Services
             return account.Password;
         }
 
-        public static double Withdraw(Bank bank, string accountID, string pin, double amount)
+        public static double Withdraw(Bank bank, string accountID, string pin, double amount, Currency currency)
         {
             Account account = bank.AccountsList.SingleOrDefault(m => m.AccountID == accountID);
             if (account != null)
             {
                 if (Validate(bank,accountID, pin))
                 {
+                    amount = (amount * currency.EquivalentINR) / account.Currency.EquivalentINR;
                     if (CheckBalance(account, amount))
                     {
-                        account.Balance = (account.Balance - amount);
+                        account.Balance = (account.Balance - amount );
                         TransactionService.AddTransaction(bank.BankID, account,"-1", "-1",account.Currency, TransactionType.Debit, amount, DateTime.Now);
                     }
                     else
@@ -179,12 +181,13 @@ namespace BankApp.Services
                                 serviceCharge = (double)bank.DifferentIMPS * amount;
                             }
                         }
+                        double destAmount = (amount * account.Currency.EquivalentINR) / DestAccount.Currency.EquivalentINR;
                         if (CheckBalance(account, amount + serviceCharge))
                         {
                             account.Balance = (account.Balance - amount - serviceCharge);
-                            DestAccount.Balance = (DestAccount.Balance + amount);
+                            DestAccount.Balance = (DestAccount.Balance + destAmount);
                             TransactionService.AddTransaction(bank.BankID, account,destinationBankID, destinationID, account.Currency, TransactionType.Debit, amount, DateTime.Now);
-                            TransactionService.AddTransaction(destinationBankID, DestAccount, bank.BankID, accountID, DestAccount.Currency, TransactionType.Credit, amount, DateTime.Now);
+                            TransactionService.AddTransaction(destinationBankID, DestAccount, bank.BankID, accountID, DestAccount.Currency, TransactionType.Credit, destAmount, DateTime.Now);
                         }
                         else
                         {

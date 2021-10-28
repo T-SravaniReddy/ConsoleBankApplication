@@ -27,7 +27,7 @@ namespace BankApp.Models
             StaffList = new List<BankStaff>();
             AcceptedCurrency = new List<Currency>();
             AccountsList = new List<Account>();
-            AcceptedCurrency.Add(new Currency("INR", 0));
+            AcceptedCurrency.Add(new Currency("INR", 1));
         }
     }
 }

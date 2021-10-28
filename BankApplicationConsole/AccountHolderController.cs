@@ -19,6 +19,8 @@ namespace BankApplicationConsole
             accountID = StandardMessages.EnterAccountID();
             pin = StandardMessages.EnterPassword();
             Bank bank = BankService.GetBank(bankID);
+            string currencyCode;
+            Currency currency;
             if (AccountService.Validate(bank, accountID, pin) == true)
             {
                 Console.WriteLine();
@@ -30,34 +32,44 @@ namespace BankApplicationConsole
                     switch (choice)
                     {
                         case Menu.UserOptions.Deposit:
-
+                            currencyCode = StandardMessages.EnterCurrency(bank);
                             amount = StandardMessages.EnterAmount();
                             if (amount <= 0) { Console.WriteLine("Invalid Amount"); break; }
-                            try
+                            currency = BankService.GetCurrency(bankID, currencyCode);
+                            if (currency != null)
                             {
-                                double balance = AccountService.Deposit(bank, accountID, pin, amount);
-                                StandardMessages.DepositMessage();
-                                StandardMessages.PrintBalance(balance);
+                                try
+                                {
+                                    double balance = AccountService.Deposit(bank, accountID, pin, amount, currency);
+                                    StandardMessages.DepositMessage();
+                                    StandardMessages.PrintBalance(balance);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex);
+                                }
                             }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex);
-                            }
+                            else Console.WriteLine("Invalid Currency");
                             break;
 
                         case Menu.UserOptions.WithDraw:
+                            currencyCode = StandardMessages.EnterCurrency(bank);
                             amount = StandardMessages.EnterWithDrawAmount();
                             if (amount <= 0) { Console.WriteLine("Invalid Amount"); break; }
-                            try
+                            currency = BankService.GetCurrency(bankID, currencyCode);
+                            if (currency != null)
                             {
-                                double balance = AccountService.Withdraw(bank, accountID, pin, amount);
-                                StandardMessages.WithDrawMessage();
-                                StandardMessages.PrintBalance(balance);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine(ex);
-                            }
+                                try
+                                {
+                                    double balance = AccountService.Withdraw(bank, accountID, pin, amount, currency);
+                                    StandardMessages.WithDrawMessage();
+                                    StandardMessages.PrintBalance(balance);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.WriteLine(ex);
+                                }
+                            } else Console.WriteLine("Invalid Currency");
                             break;
 
                         case Menu.UserOptions.Transfer:
