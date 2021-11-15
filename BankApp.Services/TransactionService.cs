@@ -11,9 +11,12 @@ namespace BankApp.Services
      public class TransactionService
     {
         static DateTime PresentDate = DateTime.Today;
+        static int count = 0;
         public static string TransactionIdGenerator(string bankID, string accountID)
         {
-            return "TXN" + bankID + accountID + PresentDate.ToString("dd") + PresentDate.ToString("MM") + PresentDate.ToString("yyyy");
+            count++;
+            return "TXN" + bankID + accountID + PresentDate.ToString("dd") + PresentDate.ToString("MM") + count.ToString();
+            
         }
         public static void AddTransaction(string bankID, Account account, string destinationBankID, string destinationID,Currency currency,  TransactionType type, double amount, DateTime datetime)
         {

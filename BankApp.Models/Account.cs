@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BankApp.Models
 {
     public class Account
-    { 
+    {
         public string AccountID { get; set; }
         public string BankID { get; set; }
         public string Name { get; set; }
@@ -26,5 +26,6 @@ namespace BankApp.Models
             Gender = gender;
             this.TransactionList = new List<Transaction>();
         }
+
     }
 }

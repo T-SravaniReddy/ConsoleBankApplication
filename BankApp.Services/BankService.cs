@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using BankApp.Models;
+using BankApp.Models.Enums;
+using Newtonsoft.Json.Linq;
 
 namespace BankApp.Services
 {
@@ -13,7 +16,47 @@ namespace BankApp.Services
         static BankService()
         {
             BanksList = new List<Bank>();
-        }
+            string jsonFile = "C:/Users/RAM/source/repos/BankApplicationConsole/BankApp.Jsons/Bank.json";
+            var json = File.ReadAllText(jsonFile);
+            try
+            {
+                var jObject = JObject.Parse(json);
+
+                if (jObject != null)
+                {
+                    string bankID = jObject["BankID"].ToString();
+                    string name = jObject["Name"].ToString();
+                    Bank bank = new Bank(bankID, name);
+                    JArray staffArray = (JArray)jObject["StaffList"];
+                    if (staffArray != null)
+                    {
+                        foreach (var item in staffArray)
+                        {
+                            BankStaff staff = new BankStaff(bankID, item["StaffID"].ToString(), item["Name"].ToString(), item["password"].ToString());
+                            bank.StaffList.Add(staff);
+                        }
+                    }
+                    JArray accountArray = (JArray)jObject["AccountsList"];
+                    if (accountArray != null)
+                    {
+                        foreach (var item in accountArray)
+                        {
+                            Account account = new Account(item["AccountID"].ToString(), bankID,  item["Name"].ToString(), bank.AcceptedCurrency[0] ,item["Password"].ToString(), (Gender)Enum.Parse(typeof(Gender), item["Gender"].ToString()));
+                           
+                            bank.AccountsList.Add(account);
+                        }
+                    }
+
+
+                    BanksList.Add(bank);
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+
+            }
         public static Bank AddBank(string name)
         {
 

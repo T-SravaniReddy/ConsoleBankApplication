@@ -15,8 +15,9 @@ namespace BankApplicationConsole
             Console.WriteLine("1. Deposit Amount");
             Console.WriteLine("2. Withdraw Amount");
             Console.WriteLine("3. Transfer Amount");
-            Console.WriteLine("4. Print Transaction History");
-            Console.WriteLine("5. Exit");
+            Console.WriteLine("4. Show Account Balance");
+            Console.WriteLine("5. Print Transaction History");
+            Console.WriteLine("6. Exit");
             Console.Write("Select Your Choice: ");
         }
 
@@ -87,7 +88,15 @@ namespace BankApplicationConsole
         internal static int EnterSameIMPS()
         {
             Console.Write("Enter IMPS Service Charges For Same Bank : ");
-            return Convert.ToInt32(Console.ReadLine());
+            string sameIMPS = Console.ReadLine();
+            int i = 0;
+            bool result = int.TryParse(sameIMPS, out i);
+            if (result) return i;
+            else
+            {
+                Console.WriteLine("IMPS charge cannot be a String");
+                return -1;
+            }
         }
 
         internal static string EnterDestinationBankID()
@@ -102,28 +111,47 @@ namespace BankApplicationConsole
             return Console.ReadLine();
         }
 
-        internal static int EnterService()
-        {
-            Console.Write("Enter Service Among 1.RTGS 2.IMPS ");
-            return Convert.ToInt32(Console.ReadLine());
-        }
-
+        
         internal static int EnterSameRTGS()
         {
             Console.Write("Enter RTGS Service Charges For Same Bank : ");
-            return Convert.ToInt32(Console.ReadLine());
+            string sameRTGS = Console.ReadLine();
+            int i = 0;
+            bool result = int.TryParse(sameRTGS, out i);
+            if (result) return i;
+            else
+            {
+                Console.WriteLine("RTGS charge cannot be a String");
+                return -1;
+            }
         }
 
         internal static int EnterDifferentRTGS()
         {
             Console.Write("Enter RTGS Service Charges For Different Bank : ");
-            return Convert.ToInt32(Console.ReadLine());
+            string diffRTGS = Console.ReadLine();
+            int i = 0;
+            bool result = int.TryParse(diffRTGS, out i);
+            if (result) return i;
+            else
+            {
+                Console.WriteLine("RTGS charge cannot be a String");
+                return -1;
+            }
         }
 
         internal static int EnterDifferentIMPS()
         {
             Console.Write("Enter IMPS Service Charges For Different Bank : ");
-            return Convert.ToInt32(Console.ReadLine());
+            string diffIMPS = Console.ReadLine();
+            int i = 0;
+            bool result = int.TryParse(diffIMPS, out i);
+            if (result) return i;
+            else
+            {
+                Console.WriteLine("IMPS charge cannot be a String");
+                return -1;
+            }
         }
 
         internal static string EnterAccountID()
@@ -157,14 +185,14 @@ namespace BankApplicationConsole
             Console.WriteLine();
         }
 
-        internal static void PrintFromStatement(string name)
+        internal static void PrintFromStatement(string id)
         {
-            Console.Write(" from " + name);
+            Console.Write(" from " + id);
         }
 
-        internal static void PrintToStatement(string name)
+        internal static void PrintToStatement(string id)
         {
-            Console.Write(" to " + name);
+            Console.Write(" to " + id);
         }
 
         internal static double EnterAmount()

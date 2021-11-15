@@ -77,7 +77,9 @@ namespace BankApplicationConsole
                             string destinationID = StandardMessages.EnterDestinationAccountID();
                             amount = StandardMessages.EnterTransferAmount();
                             if (amount <= 0) { Console.WriteLine("Invalid Amount"); break; }
-                            int option = StandardMessages.EnterService();
+                            int option;
+                            if (amount > 20000000) option = 1;
+                            else option = 2;
                             try
                             {
                                 double balance = AccountService.TransferAmount(bank, accountID, pin, amount, destinationBankID, destinationID, option);
@@ -88,6 +90,10 @@ namespace BankApplicationConsole
                             {
                                 Console.WriteLine(ex);
                             }
+                            break;
+
+                        case Menu.UserOptions.AccountBalance:
+                            StandardMessages.PrintBalance(AccountService.GetAccount(bank,accountID).Balance);
                             break;
 
                         case Menu.UserOptions.TransactionHistory:
@@ -141,12 +147,15 @@ namespace BankApplicationConsole
                 {
                     if (transaction.Type == TransactionType.Credit)
                     {
-                        StandardMessages.PrintFromStatement(AccountService.GetName(bank, transaction.DestinationAccountID));
+                        StandardMessages.PrintFromStatement(transaction.DestinationAccountID);
                     }
                     else
                     {
-                        StandardMessages.PrintToStatement(AccountService.GetName(bank, transaction.DestinationAccountID));
+                        StandardMessages.PrintToStatement( transaction.DestinationAccountID);
                     }
+                } else
+                {
+                    Console.Write("to SELF");
                 }
                 StandardMessages.PrintLine();
             }

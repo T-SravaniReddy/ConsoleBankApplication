@@ -95,14 +95,14 @@ namespace BankApplicationConsole
                         case Menu.StaffOptions.SameBankServiceCharge:
                             int sameRTGS = StandardMessages.EnterSameRTGS();
                             int sameIMPS = StandardMessages.EnterSameIMPS();
-                            if (sameIMPS <= 0 || sameRTGS <= 0) { Console.WriteLine("Invalid Charge"); break; }
+                            if (sameIMPS < 0 || sameRTGS < 0) { Console.WriteLine("Invalid Charge"); break; }
                             BankService.ChangeSameBankService(bankID, sameRTGS, sameIMPS);
                             break;
 
                         case Menu.StaffOptions.DifferentBankServiceCharge:
                             int differentRTGS = StandardMessages.EnterDifferentRTGS();
                             int differentIMPS = StandardMessages.EnterDifferentIMPS();
-                            if (differentIMPS <= 0 || differentRTGS <= 0) { Console.WriteLine("Invalid Charge"); break; }
+                            if (differentIMPS < 0 || differentRTGS < 0) { Console.WriteLine("Invalid Charge"); break; }
                             BankService.ChangeDifferentBankService(bankID, differentRTGS, differentIMPS);
                             break;
 

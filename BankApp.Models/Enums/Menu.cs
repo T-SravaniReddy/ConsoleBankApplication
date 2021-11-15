@@ -11,6 +11,7 @@ namespace BankApp.Models.Enums
             Deposit = 1,
             WithDraw,
             Transfer,
+            AccountBalance,
             TransactionHistory,
             Exit
         }

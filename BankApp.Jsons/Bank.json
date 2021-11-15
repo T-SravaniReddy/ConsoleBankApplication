@@ -1,0 +1,29 @@
+{
+  "BankID": "HDF15112021",
+  "Name": "HDFC",
+  "SameRTGS": 0,
+  "SameIMPS": 5,
+  "DifferentRTGS": 2,
+  "DifferentIMPS": 6,
+  "StaffList": [
+    {
+      "StaffID": "sra15112021",
+      "Name": "sravani",
+      "password": "1234"
+    }
+  ],
+  "AccountsList": [
+    {
+      "AccountID": "nav15112021",
+      "Name": "navya",
+      "Password": "1234",
+      "Gender": 2
+    },
+    {
+      "AccountID": "div15112021",
+      "Name": "divya",
+      "Password": "1234",
+      "Gender": 2
+    }
+  ]
+}
